@@ -1,0 +1,14 @@
+<% layout("/layouts/boilerplate.ejs") %>
+<body>
+</body>
+<script>
+    async function fetchTitle(side) {
+        try {
+            const response = await fetch(`/get-title/${side}`); // Fetch title from server
+            const data = await response.json();
+            document.getElementById("title").innerText = data.title; // Update UI
+        } catch (error) {
+            console.error("Error fetching title:", error);
+        }
+    }
+</script>

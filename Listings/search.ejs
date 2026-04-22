@@ -1,0 +1,65 @@
+<% layout("/layouts/boilerplate.ejs") %>
+<style>
+    
+</style>
+<body>
+  <form class="d-flex" role="search" method="POST" action="/search">
+    <div class="container mt-4 offset-md-2">
+      
+          <div class="row g-2">
+              <!-- Search Input (Takes Full Width on Mobile) -->
+              <!-- Min Price -->
+              <div class="col-md-2 col-6">
+                <input  class="form-control me-2 search-btn" type="number" name="minPrice"  placeholder="Min Price"> 
+              </div>
+  
+              <!-- Max Price -->
+              <div class="col-md-2 col-6">
+                <input  class="form-control me-2 search-btn" type="number" name="maxPrice"  placeholder="Max Price"> 
+              </div>
+              <div class="col-md-4">
+                <input class="form-control me-2 search-btn" type="search" placeholder="Search Your Destination..." name="searchTearm" aria-label="Search">
+              </div>
+  
+              <!-- Submit Button (Full Width on Mobile, Inline on Desktop) -->
+              <div class="col-md-1 d-grid ">
+                <button type="submit" class="button"><i class="fa fa-search"></i></button>
+              </div>
+          </div>
+      
+  </div>
+  </form>
+  <br>  <h6 class="searchhead">You Searched For...</h6>
+            
+  <div class="row row-cols-lg-3 row-cols-md-2 row-cols-sm-1 mt-3 ">
+        <% if (listingss != "") { %>
+            <% listingss.forEach(element => { %>
+            <div class="card-index-search ">
+            <a href="/listings/<%= element._id %> " class="list-link">
+            <div class="card col card-listing" >
+                <img src="<%= element.image.url %>" class="card-img-top" alt="" style="height: 18rem;">
+                <div class="card-img-overlay"><%= element.title %></div>
+                <div class="card-body">
+                  <p class="card-text">
+                    <b><%= element.location %> , <%= element.country %></b>
+                    <br>
+                    &#8377; <%= element.price.toLocaleString("en-IN") %>/night
+                    <br><i class="tax-info">with GST &nbsp; &#8377;<%= element.price * 1.5 %></i>
+                    <!-- gst logic in script.js -->
+                  </p>
+                </div>
+          
+              </div>
+            </a></div>
+
+                
+           <% }); %>
+
+     
+
+            <% } else { %>
+             <h5 class="searchhead">You Searched destination is not found...</h5>
+        <% } %>
+      </div>
+    
+</body>

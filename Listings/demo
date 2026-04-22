@@ -1,0 +1,192 @@
+<% layout("/layouts/boilerplate.ejs") %>
+<!-- if not woorks then use demo  -->
+<body>
+  <div id="overlay"></div>
+  <div class="fade-in" id="content">
+  <h3 id="reset-timer"></h3>
+    <div class="row " >
+        <div class="col-12 col-md-6 offset-md-3">
+    <h1><%= listing.title %></h1>
+    <div class="card card-listing">
+        <div>
+        <img src="<%= listing.image.url %>" class="card-img-top show-img" alt="...">
+        </div>
+    <div class="card-body ">
+    <p class="card-text">
+      <% if (listing.reviews.length > 0) { %>
+        <% 
+            let totalRating = listing.reviews.reduce((sum, review) => sum + review.rating, 0);
+            let avgRating = (totalRating / listing.reviews.length).toFixed(1);
+        %>
+        <h5><i class="fa-solid fa-star fa-lg" ></i> <%= avgRating %> <a href="#" id="showReview"> See Reviews</a>
+          
+        </h5>
+                    
+    <% } else { %>
+        <p class="reviewss">No reviews yet...</p>
+    <% } %>
+        <b><i>Owned By :<%= listing.owner.username %></i></b><br>
+        <b>Price: &#8377; <%= listing.price.toLocaleString("en-IN") %>/night</b>&nbsp; &nbsp;<i class="tax-info">with GST  &#8377;<%= listing.price * 1.5 %></i>
+        <br>
+        <b>Location: <%= listing.location %></b><br>
+        <b>Country: <%= listing.country %></b><br>
+        <hr>
+        <b>Dscribe: <%= listing.description %></b><br><hr>
+    </p>
+    <h3><b>Available Rooms : <%= listing.rooms %></b></h3>
+    
+    </div>
+    </div>
+    
+    <% if(listing.rooms>0){ %>
+    <% if(currentUser && currentUser.username !== "ShrustiHalli"){ %>
+        <a href="/listings/<%= listing._id %>/bookings"class="button">Reserve Now</a>
+    
+    <% } %><% } %><br>
+    <div class="btns">
+        <% if(currentUser && currentUser.username === "ShrustiHalli"){ %>
+    <a href="/listings/<%= listing._id %>/edit"class="button col-lg-1 col-md-3" >Edit</a>
+    <form action="/listings/<%= listing._id %>?_method=DELETE" method="post">
+        <button class="button offset-2">Delete</button>
+    </form>
+    <% } %>  
+    </div>
+   
+</div></div>
+ <div class="row ">
+    <div class="col-12 col-md-6 offset-md-3"><hr>
+      <% if(currentUser){ %> 
+          <h4>Leave a Review</h4>
+          <form action="/listings/<%= listing._id %>/reviews" method="POST" novalidate class="needs-validation">
+
+          <fieldset class="starability-slot" max="5">
+      
+          <input type="radio" id="no-rate" class="input-no-rate" name="review[rating]" value="1" min="1" max="5" checked aria-label="No rating." />
+          <input type="radio" id="first-rate1" name="review[rating]" value="1" />
+          <label for="first-rate1" title="Terrible">1 star</label>
+          <input type="radio" id="first-rate2" name="review[rating]" value="2" />
+          <label for="first-rate2" title="Not good">2 stars</label>
+          <input type="radio" id="first-rate3" name="review[rating]" value="3" />
+          <label for="first-rate3" title="Average">3 stars</label>
+          <input type="radio" id="first-rate4" name="review[rating]" value="4" />
+          <label for="first-rate4" title="Very good">4 stars</label>
+          <input type="radio" id="first-rate5" name="review[rating]" value="5" />
+          <label for="first-rate5" title="Amazing">5 stars</label>
+          </fieldset>
+          
+          <label for="comment" class="form-lable">Comment</label>
+          <textarea name="review[comment]" id="comment" class="form-control" required></textarea>
+          <div class="invalid-feedback">comment pls!</div><br>
+          <button class="button">Submit</button>
+          <hr>
+</form>
+<% } %>
+   
+</div></div> 
+<h5>More places in <span class="span1"><%= listing.location %></span>...</h5>
+<div class="row row-cols-lg-5 row-cols-md-2 row-cols-sm-2 mt-3 ">
+    <% relatedListings.forEach(related => { %>
+      <div class="card-index">
+        <a href="/listings/<%= related._id %> " class="list-link">
+        <div class="card col card-listing" >
+            <img src="<%= related.image.url %>" class="card-img-top-related" alt="Related Listing Image">
+                <div class="card-img-overlay"><%= related.title %></div>
+            <div class="card-body">
+              <p class="card-text">
+                <b><%= listing.location %> , <%= listing.country %></b>
+                <br>
+                &#8377; <%= listing.price.toLocaleString("en-IN") %>/night
+                <br><i class="tax-info">with GST &nbsp; &#8377;<%= listing.price * 1.5 %></i>
+                <!-- gst logic in script.js -->
+                 
+              </p>
+            </div>
+      
+          </div>
+        </a></div>
+       <% }); %>
+</div>
+</div>
+
+<div id="reviewBox" >
+  <div class="row " id="reviewss" >
+    <button onclick="closeReview()" class="button1"><i class="fa-solid fa-xmark fa-lg"></i></button>
+    <br>
+    <h5 class="reviewhead">Reviews</h5>
+  <div class="row row-cols-lg-2 row-cols-md-2 row-cols-sm-1 mt-3" >
+      <% for(review of listing.reviews){ %>
+          <div class="card-review ">
+          <div class="card-body ">
+          <p class="card-title"><i>-<%= review.author.username %></i></p>
+          <p class="card-text"><%= review.comment %> <br>
+            Rating: <i class="fa-solid fa-star " ></i><%= review.rating %></p>
+          </div>
+        <!-- <% if(review.author.username) {%>
+          <form method="POST" action="/listings/<%= listing._id %>/reviews/<%= review._id %>?_method=DELETE" class="mb-3">
+              <button class="btn btn-xsm btn-dark">Delete</button>
+          </form>
+          <% } %>  -->
+          <hr>
+      </div>
+      <% } %>
+      </div>
+  </div>
+
+  <!-- <button onclick="closeReview()" class="button button1">Close</button> -->
+</div>
+
+<script>
+function startCountdown(resetTime) {
+  function updateTimer() {
+      const now = Date.now();
+      const timeLeft = resetTime - now;
+      if (timeLeft <= 0) {
+          document.getElementById("reset-timer").innerText = "Rooms Resetting Soon!";
+          return;
+      }
+      const days = Math.floor(timeLeft / (1000 * 60 * 60 * 24));
+      const hours = Math.floor((timeLeft % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+      const minutes = Math.floor((timeLeft % (1000 * 60 * 60)) / (1000 * 60));
+      const seconds = Math.floor((timeLeft % (1000 * 60)) / 1000);
+
+      // document.getElementById("reset-timer").innerText =
+      //     `Rooms Reset In: ${days}d ${hours}h ${minutes}m ${seconds}s`;
+
+      setTimeout(updateTimer, 1000);
+  }
+  updateTimer();
+}
+
+window.onload = () => {
+  startCountdown("<%= resetTime %>");
+};
+</script>
+<script>
+ document.getElementById('showReview').addEventListener('click', function(event) {
+    event.preventDefault(); // Prevent page reload
+    document.getElementById('reviewBox').style.display = 'block';
+    document.getElementById('overlay').style.display = 'block';
+    
+    // Add opacity transition for smooth appearance
+    setTimeout(() => {
+        document.getElementById('reviewBox').style.opacity = '1';
+        document.getElementById('overlay').style.opacity = '1';
+    }, 10); // Small delay to trigger transition
+});
+
+function closeReview() {
+    document.getElementById('reviewBox').style.opacity = '0';
+    document.getElementById('overlay').style.opacity = '0';
+
+    // Wait for the transition to complete before hiding
+    setTimeout(() => {
+        document.getElementById('reviewBox').style.display = 'none';
+        document.getElementById('overlay').style.display = 'none';
+    }, 300);
+}
+
+// Close when clicking outside reviewBox
+document.getElementById('overlay').addEventListener('click', closeReview);
+</script>
+
+</body>

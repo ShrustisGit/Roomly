@@ -1,0 +1,26 @@
+<% layout("/layouts/boilerplate1.ejs") %>
+
+<h1>Your Canceled Bookings</h1>
+
+<% if (canceledBookings.length > 0) { %>
+    <div class="row">
+        <% canceledBookings.forEach(booking => { %>
+            <div class="col-md-4">
+                <div class="card">
+                    <img src="<%= booking.listing.image.url %>" class="card-img-top" alt="Hotel Image">
+                    <div class="card-body">
+                        <h5 class="card-title"><%= booking.hotelname %></h5>
+                        <p><strong>Location:</strong> <%= booking.location %>, <%= booking.country %></p>
+                        <p><strong>Rooms:</strong> <%= booking.noofrooms %></p>
+                        <p><strong>Check-in:</strong> <%= booking.checkin.toDateString() %></p>
+                        <p><strong>Check-out:</strong> <%= booking.checkout.toDateString() %></p>
+                        <p><strong>Total Price:</strong> $<%= booking.totalPrice %></p>
+                        <p class="text-danger"><strong>Status:</strong> Canceled</p>
+                    </div>
+                </div>
+            </div>
+        <% }); %>
+    </div>
+<% } else { %>
+    <p>No canceled bookings found.</p>
+<% } %>

@@ -1,0 +1,90 @@
+<% layout("/layouts/boilerplate.ejs") %>
+<style>
+  body{
+    font-family: sans-serif;
+  }
+</style>
+<body><br>
+  <div class="fade-in" id="content">
+  <!-- <% if(currentUser) {%>
+    <h4>HI <%= currentUser.username.toUpperCase() %> , Wellcome to Roomly...</h4>
+    <% } %> -->
+  <form class="d-flex" role="search" method="POST" action="/search">
+  <div class="container mt-2 offset-md-2">
+        <div class="row g-2">
+            <!-- Min Price -->
+            <div class="col-md-2 col-6">
+              <input  class="form-control me-2 search-btn" type="number" name="minPrice"  placeholder="Min Price" >
+            </div>
+            <!-- Max Price -->
+            <div class="col-md-2 col-6">
+              <input  class="form-control me-2 search-btn" type="number" name="maxPrice"  placeholder="Max Price" > 
+            </div>
+
+            <!-- Search Input (Takes Full Width on Mobile) -->
+            <div class="col-md-4">
+              <input class="form-control me-2 search-btn" type="search" placeholder="Search Your Destination..." name="searchTearm" aria-label="Search" >
+            </div>
+ 
+             <!-- Submit Button (Full Width on Mobile, Inline on Desktop) -->
+             <div class="col-md-1 d-grid ">
+              <button type="submit" class="button"><i class="fa fa-search"></i></button>
+            </div> 
+
+        </div>
+</div> 
+</form>
+
+
+    <div class="row row-cols-lg-3 row-cols-md-2 row-cols-sm-1 mt-3 ">
+        <% for (let listing of allListing){ %>
+          <div class="card-index">
+            <a href="/listings/<%= listing._id %> " class="list-link">
+            <div class="card col card-listing" >
+                <img src="<%= listing.image.url %>" class="card-img-top" alt="" style="height: 18rem;">
+                <div class="card-img-overlay"><%= listing.title %>
+                </div>
+                <div class="card-body">
+                  <p class="card-text">
+                    <b><%= listing.location %> , <%= listing.country %></b>
+                    <br>
+                    &#8377; <%= listing.price.toLocaleString("en-IN") %>/night  
+                    <i class="tax-info">with GST &#8377;<%= listing.price * 1.5 %></i><br>
+                    <b class="starss"><i class="fa-solid fa-star fa-lg" ></i><%= listing.avgRating %> </b>
+                    <!-- gst logic in script.js -->
+                     
+                    
+                  </p>
+                </div>
+          
+              </div>
+            </a></div>
+           <% } %>
+  </div>
+
+  <div class="pagination">
+    <% if (page > 1) { %>
+        <a href="/listings/?page=<%= page - 1 %>"><i class="fa-solid fa-backward fa-xl" style="color: #000000;"></i></a>
+    <% } %>
+
+    &nbsp;&nbsp;&nbsp; <%= page %> of <%= totalPages %>&nbsp;&nbsp;&nbsp;
+
+    <% if (page < totalPages) { %>
+        <a href="/listings/?page=<%= page + 1 %>"><i class="fa-solid fa-forward fa-xl" style="color: #000000;"></i></a>
+    <% } %>
+</div>
+<br>
+</div>
+
+
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+      setTimeout(() => {
+          document.getElementById("content").classList.add("visible");
+      }, 500); // 500ms delay before fade-in starts
+  });
+</script>
+
+</body>
+
+
