@@ -1,0 +1,38 @@
+<% layout("/layouts/boilerplate1.ejs") %>
+
+<div class="row mt-3">
+    <div class="col-12 col-md-5 offset-md-3">
+        <br><br><br>
+        <h2>Verify Your-Self</h2>
+        <form action="/verify-code" method="POST" novalidate class="needs-validation">
+            
+            <div class="md-3">
+                <label for="email" class="form-lable">Email</label>
+                <input name="email" 
+                    type="text"
+                    class="form-control" 
+                    id="email"
+                    required>
+                         
+            </div>
+            <div class="md-3">
+                <label for="resetCode" class="form-lable">Enter the 6-digit code sent to your email:</label>
+                <input name="resetCode" 
+                    type="text"
+                    class="form-control" 
+                    id="resetCode"
+                    required>
+                      
+            </div><br>
+            <button class="login" type="submit">Verify</button>
+            
+        </form>
+    
+    </div>
+</div>
+
+
+
+
+
+
