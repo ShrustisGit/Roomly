@@ -1,2 +1,3 @@
 # Roomly
 Clone like airbnb...
+Roomly enhances the user experience by offering instant PDF downloads for reservation receipts and automated email confirmations upon booking. These features provide users with a secure, permanent record of their stay delivered directly to their inbox and available for offline access.
